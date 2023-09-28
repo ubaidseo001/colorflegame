@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Colorfle</title>        
+        <link rel="stylesheet" href="./css/style.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap">
+        <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+        <link rel="manifest" href="./site.webmanifest">
+        <meta name="description" content="Colorfle: the daily color mixing game! Try to match the Colorfle in six tries.">
+        <meta name="color-scheme" content="light dark">
+      </head>
+    <body>
+        <noscript>You need to enable JavaScript to view the full site.</noscript>
+
+
+        <header>
+          <div>
+            <button id="faq-button" class = "headerButton"><i class="fa-regular fa-circle-question headerIcon"></i></button>            
+            <button id="stats-button-invis" class = "headerButton invisButton"><i class="fa-solid fa-ranking-star headerIcon"></i></button> 
+          </div>
+          <div class= "title">Colorfle</div>
+          <div class= "menu-right">
+            <button id="lightdark-button" class = "headerButton"><i id="lightDarkIcon" class="fa-solid fa-moon headerIcon"></i></button>
+            <button id="stats-button" class = "headerButton"><i class="fa-solid fa-ranking-star headerIcon"></i></button>
+          </div>
+        </header>
+        
+        <div id="snackbar">Copied to clipboard!</div>
+
+        <!-- The Modal -->
+        <div id="faqModal" class="modal">
+          <!-- Modal content -->
+          <div id="faqModalContent" class="modal-content">
+            <span class="close" id="faqClose">&times;</span>
+            <p class="titleHeader">How to play</p>
+            
+            <p class="faqIntro">Match the Colorfle in six tries. The target color is composed of three unique colors mixed together.</p>
+
+              <div id= "demoChartContainer">
+                <div class = "demoChartText demoChartTextLeft">Composition guess<i class="fa-solid fa-arrow-right-long fontIcon "></i></div>
+                <canvas id="demoChart"></canvas>
+                <div class = "demoChartText demoChartTextRight"><i class="fa-solid fa-arrow-left-long fontIconRight"></i>Colorfle</div>
+              </div>
+              <p>The guess here is that the Colorfle is composed of 50% blue, 30% red, and 20% yellow.</p>
+
+              <div id="demoGuessFlex" >
+            <div id="demoGuessFirstContainer">
+              <div class="gridLabelText">Guess</div>
+              <div class="gridLabelTextSmall">Resulting Color and Color Accuracy</div>
+              <div class="demoGuessContainer" id= "demoGuessContainerCorrect"></div>
+              <div id="demoButtonContainer"></div>
+            </div>
+
+              </div>
+              <!--
+              <div id="demoGuessFlex" >
+                <div id= "demoGuessContainerMisplaced"></div>
+  
+                <p>Guesses in the wrong spot will be highlighted in yellow (This color is in the answer but is in the wrong spot).</p>   
+                </div> 
+              <div id="demoGuessFlexRight" >
+                <div id= "demoAvgContainerCorrect"></div>
+              </div>-->
+              <p class="subHeader"><strong>Examples</strong></p>
+              <div class="flexDemo">
+              <div class="demoGuessContainer demoFlex" id= "demoGuessContainerWrong"></div>
+              <p class="demoFlexText">Colors that are wrong are not highlighted.</p>      
+              </div>   
+              <div class="flexDemo">    
+              <div class = "demoGuessContainer demoFlex" id= "demoGuessContainerMisplaced"></div>  
+              <p class="demoFlexText">Colors that are correct but in the wrong spot will be highlighted in yellow.</p>  
+              </div>  
+
+              
+              <div class="flexDemo">
+              <div class="demoGuessContainer demoFlex" id= "demoGuessContainerRightOrder"></div>
+              <p class="demoFlexText">Colors that are correct, and in the right spot will be highlighted in green.</p>
+              </div>
+
+              <div class="flexDemo">
+                
+              <div class="demoGuessContainer demoFlexButton" id= "demoGuessContainerButton"></div>
+              <p class="demoFlexText">Click the result circle to compare against a previous guess.</p>
+              </div>
+
+              
+              <!--<p>The order of the colors matters. The Colorfle is 50% the first color, 30% the second, and 20% the third.
+                Below shows the guess in the wrong order.</p>
+              <div class="demoGuessContainer" id= "demoGuessContainerWrongOrder"></div>-->
+              
+               
+              
+              <!--<p>The percentage displayed after each guess is how similar the guess is to the final color.</p>     --> 
+              
+              <!--<div id= "demoAvgContainerCorrectCircle"></div>-->
+              
+              <div class="demoGuessContainer" id= "demoGuessContainerStats"></div>  
+              
+              <!--<p>The order of the colors DOES matter. The first color is the base color, followed by the second and so on.
+                Below shows the difference.
+              </p>-->
+             
+
+              <p class="subHeaderBottom"><strong>There is a new Colorfle every day at 5PM your time.</strong></p>
+              <p>Questions or comments? Contact us at <a href="mailto:admin@colorflegame.com">admin@colorflegame.com</a>.</p>
+              <p><a href="privacy">Privacy Policy</a></p>
+          </div>
+
+        </div>
+
+        <!-- The Modal -->
+        <div id="statsModal" class="modal">
+          <!-- Modal content -->
+          <div id="statsModalContent" class="modal-content">
+            <span class="close" id="statsClose">&times;</span>
+
+
+
+            <p class="titleHeader">Statistics</p>
+
+            <div class ="flexStatisticsContainer">
+              <div class="statsContainer">
+                <div class="statistic" id="winStat"></div>
+                <div class="statsLabel">Wins</div>
+              </div>
+              <div class="statsContainer">
+                <div class="statistic" id="hardWinStat"></div>
+                <div class="statsLabel">Hard Mode Wins</div>
+              </div>
+              <div class="statsContainer">
+                <div class="statistic" id="currentStreakStat"></div>
+                <div class="statsLabel">Current Streak</div>
+              </div>
+              <div class="statsContainer">
+                <div class="statistic" id="maxStreakStat"></div>
+                <div class="statsLabel">Max Streak</div>
+              </div>
+            </div>
+            <div id = "resultContainer">
+              <p class="subTitleHeader">Solution</p>
+              <div id="answerField"></div>
+            </div>            
+            <div id= "accuracyContainer">
+              Your average color accuracy was <div id= "accuracyStat"></div>
+            </div>
+            <div id = "flexFoot" class="flexFooter">
+              <div id="timerHalf">
+                <div class="footerText">NEXT COLORFLE</div>
+                <div id="timerTilNext"></div>
+              </div>
+              <div id="shareHalf">
+              <button id="shareButton">Share</button>
+              </div>
+              </div>
+                         
+            
+            <div id= "practiceFoot">
+              Want to warm up? Try <a href="practice">Practice Mode</a>
+            </div>
+            <div id= "paintFoot">
+              Looking for something a little different? Try the more life-like <a href="paint">Paint Edition</a>
+            </div>
+            <div id= "customFoot">
+             Want to create your own Colorfle? <a href="custom">Click Here</a>
+            </div>
+            <div id="merchFoot">
+              <b id="merchNew">NEW:</b> Love Colorfle? Show your support with our exclusive <a href="merch">merch</a>!
+            </div>
+
+            </div>
+
+
+          </div>
+
+          <!-- The Modal -->
+        <div id="settingsModal" class="modal">
+          <!-- Modal content -->
+          <div  class="modal-content">
+            <span class="close" id="settingsClose">&times;</span>
+            <p>How to play</p>
+            </div>
+          </div>
+
+        <div id="gameField">
+        <!--<div id ="answerBlockFieldContainer">-->
+        <div id="answerBlockField">
+                  <!-- Rounded switch -->
+          <!--<label class="switch">
+            <input id= "modeSwitch" type="checkbox">
+            <span class="slider round"></span>
+          </label>-->
+          <div class="switch-button" id="switchButton">
+            <input id= "modeSwitch" type="checkbox">
+            <!--<span class="active">-->
+            </span>
+              <button class="switch-button-case left">Normal</button>
+              <button class="switch-button-case right">Hard</button>
+
+          </div>
+          
+          <div class="difficultySection" id="difficultyGroup" >
+              <div class="difficultySub">Difficulty:</div>
+              <div class="difficultySub" id="difficultyIndicator"></div>
+              <div class="difficultySub" id="difficultyUnavailable">Available Later</div>
+            </div>
+            <div class= "practiceSection">
+               (<a href="practice">Practice Mode</a>)
+            </div>
+          <div id="chartDiv">
+            <canvas id="answerChart"></canvas>
+            <canvas id="finalChart"></canvas>
+          </div>
+        </div>
+        <!--</div>-->
+        <div id="playingFieldContainer">
+        <div id="playingField"></div>
+        </div>
+        <div id="colorField">
+          <!--<button id="palette-button" class = "paletteButton"><i id="paletteIcon" class="fa-solid fa-arrow-down-short-wide"></i></button>-->
+        </div>
+      </div>
+        <script src="https://cdn.jsdelivr.net/npm/resize-observer-polyfill@1.5.1/dist/ResizeObserver.min.js"></script>
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js">
+        </script>
+
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+            import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+            import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+            
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+          
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+              apiKey: "AIzaSyDsyoO2mu0srqjzpJG_yBPPAhDU-lIQzrI",
+              authDomain: "colordle-9fdfa.firebaseapp.com",
+              databaseURL: "https://colordle-9fdfa-default-rtdb.firebaseio.com/",
+              projectId: "colordle-9fdfa",
+              storageBucket: "colordle-9fdfa.appspot.com",
+              messagingSenderId: "812910981973",
+              appId: "1:812910981973:web:4c6e774b2dee78e6f835dc",
+              measurementId: "G-SW9Q7PFFKT"
+            };
+          
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+
+            // Get a reference to the database service
+            const database = getDatabase(app);
+            const auth = getAuth(app);
+
+            var uid;
+
+            signInAnonymously(auth)
+              .then(() => {
+                // Signed in..
+              })
+              .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ...
+              });
+
+              onAuthStateChanged(auth, (user) => {
+                if (user) {
+                  // User is signed in, see docs for a list of available properties
+                  // https://firebase.google.com/docs/reference/js/firebase.User
+                  uid = user.uid;
+                  // ...
+                } else {
+                  // User is signed out
+                  // ...
+                }
+              });
+
+
+              window.writeGame = function(days, mode, gameOver, darkMode, paletteMode) {                
+              if (uid != null)
+              {
+                  //const db = getDatabase();
+                  set(ref(database, 'users/' + uid+ '/games/' + days + '/' + mode + '/result/'), {
+                  score: gameOver,
+                  darkMode: darkMode,
+                  paletteMode: paletteMode
+                  });
+              }
+              
+              /* else
+              {
+                  const db = getDatabase();
+                  set(ref(db, 'users/anon/games/' + days + '/' + mode + '/result/'), {
+                  score: gameOver
+                  });
+              }*/
+            }
+
+              window.writeGamePartial = function(days, mode) {                
+                if (uid != null)
+                {
+                    //const db = getDatabase();
+                    set(ref(database, 'users/' + uid+ '/games/' + days + '/' + mode +'/partial/'), {
+                      partial: true
+                    });
+                }
+                
+              }
+
+              window.writeGameShared = function(days, mode) {                
+                if (uid != null)
+                {
+                    //const db = getDatabase();
+                    set(ref(database, 'users/' + uid+ '/games/' + days + '/' + mode +'/shared/'), {
+                      shared: true
+                    });
+                }
+                
+              }
+
+              window.getDifficulty = function(days, mode)
+              {
+                return get(ref(database, 'games/' +days + '/' +  mode + '/completed/difficulty')).then((snapshot) => {
+                  if (snapshot.exists())
+                  {
+                    return snapshot.val();
+                  }
+                  else
+                  {
+                    return null;
+                  }
+                })
+              }
+          </script>
+          
+          <script src="./js/script.min.js"></script>
+    </body>
+</html>
